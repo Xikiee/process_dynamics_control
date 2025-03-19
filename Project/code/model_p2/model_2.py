@@ -66,7 +66,7 @@ height_in_mm_model = height_model*10  # Convert to mm
 # Plot results
 plt.figure(figsize=(8, 5))
 plt.plot(time_model, height_in_mm_model, label="Model Predicted Height", color='b', linestyle='dashed')
-plt.plot(data.data['Time'].to_numpy(), data.data['Height'].to_numpy(), label = "Experimental Data")
+plt.plot(data.data['Time'].to_numpy(), data.data['Height'].to_numpy(), label = "Experimental Data",color='red')
 
 # plt.scatter(time_exp, height_exp_data_mm, label="Experimental Data", color='r', marker='o', s=10)
 # plt.plot(time_exp, height_exp_data_mm, label='experiment data', color = 'r')
@@ -75,5 +75,7 @@ plt.xlabel("Time [s]")
 plt.ylabel("Water Height [mm]")
 plt.title("Comparison of Model and Experimental Water Levels")
 plt.legend()
-plt.grid()
+plt.minorticks_on()
+plt.grid(which='major',linewidth = 0.5)
+plt.grid(which='minor', linewidth = 0.2)
 plt.show()
