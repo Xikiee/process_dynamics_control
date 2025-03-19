@@ -3,22 +3,30 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.ndimage import median_filter
 
-def ODE(P, F, h0, time_duration, dt=0.1):
+
+def ODE(P, F, h0, time, dt=0.1):
     A1 = 0.0154  # Area of tank in m^2
     A2 = 4.91e-4  # Area of drain pipe in m^2
     k_pump = 1.1  
     g = 9.81  
     k_opening = 5  # Fixed within range 2 to 8
-    h = h0  # Initial height in the tank
+    h = h0  #Initial height 
     
-    t_vals = np.arange(0, time_duration, dt)
-    h_vals = np.zeros_like(t_vals)
+    # t_vals = np.arange(0, time_duration, dt)
+    h_vals = np.zeros_like(time)
     
-    for i, t in enumerate(t_vals):  
-        dh_dt = (k_pump/A1) * P - (k_opening * F * (A2 / A1) * np.sqrt(2 * g * h))  
+    # for i, t in enumerate(time):  
+    #     dh_dt = (k_pump/A1) * P - (k_opening * F * (A2 / A1) * np.sqrt(2 * g * h))  
+    #     h = max(0, h + dh_dt * dt)  
+    #     h_vals[i] = h
+
+    for i in range(len(time)):
+        dh_dt = (k_pump/A1) * P[i] - (k_opening * F[i] * (A2 / A1) * np.sqrt(2 * g * h))  
         h = max(0, h + dh_dt * dt)  
         h_vals[i] = h
-    return t_vals, h_vals
+
+    return time, h_vals
+
 
 
 class Experiment():
@@ -36,35 +44,23 @@ class Experiment():
 
 file_path = r"Project\data\cons_out_flow\const_outflow_90.csv" # enter your file path here!!!!!
 data = Experiment(file_path)
-# print(data.data.head())
 
 
-# P = 0.01  # Pump setting
-# F = 0.0  # Fraction valve opening
-# h0 = 0.0  # Initial height in meters
-# time_duration = 50  # Duration for which this setting was kept
-# t_offset = 10
-
-P = data.data['Pump']
+P = data.data['Pump']*0.1 #multiplying by 0.1 to change units
 F = data.data['Valve']
-h0 = data.data['Height'][0]
-time_duration = data.data['Time'][-1]
-print(h0)
-print(time_duration)
+# h0 = data.data['Height'].iloc[0]
+h0 = 0 #since the value from data is negative it doesnt make sence and issues arrise in the model later, hence int height is 0
+# time_duration = data.data['Time'].iloc[-1] ### dont need cuz it was changed to use time values extracted from experiment instead
+time = data.data['Time']
 
+
+# print(f"int height = {h0}")
+# print(f"final time = {time_duration}")
 
 
 # Run the simulation
-time_model, height_model = ODE(P, F, h0, time_duration)
+time_model, height_model = ODE(P, F, h0, time)
 height_in_mm_model = height_model*10  # Convert to mm
-
-
-# # Load experimental data
-# df = pd.read_csv(file_path)
-# time_exp = df.iloc[:, 0].values  # Time in column 1
-# height_exp_data_mm = df.iloc[:, 1].values  # Height in column 2
-
-# time_model = time_model + t_offset
 
 
 # Plot results
