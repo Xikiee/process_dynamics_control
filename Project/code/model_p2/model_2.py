@@ -71,8 +71,8 @@ plt.plot(data.data['Time'].to_numpy(), data.data['Height'].to_numpy(), label = "
 # plt.scatter(time_exp, height_exp_data_mm, label="Experimental Data", color='r', marker='o', s=10)
 # plt.plot(time_exp, height_exp_data_mm, label='experiment data', color = 'r')
 
-plt.xlabel("Time [s]")
-plt.ylabel("Water Height [mm]")
+plt.xlabel("Time (s)",weight ='bold')
+plt.ylabel("Water Height (mm)",weight = 'bold')
 plt.title("Comparison of Model and Experimental Water Levels")
 plt.legend()
 plt.minorticks_on()
