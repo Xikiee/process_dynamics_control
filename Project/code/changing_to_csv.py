@@ -2,9 +2,9 @@ from asammdf import MDF
 import numpy as np
 
 #done for eperiment 6
-input_file = r"Project\data\rec1_006.mf4"
+input_file = r"Project\data\24_02_25\rec1_005.mf4"
 
-output_file = 'experiment_6.csv'
+output_file = 'rec1_005.mf4'
 
 mdf = MDF(input_file)
 

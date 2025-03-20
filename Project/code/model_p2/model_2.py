@@ -27,8 +27,8 @@ def ODE(P, F, h0, time, dt=0.1):
 class Experiment():
     def __init__(self, csv_name_, set_values_vs_time = None):
         self.filename = csv_name_
-        # data = pd.read_csv( self.filename, skiprows=29, usecols=[0, 1, 2, 3], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! Seeing as this was originally a .mf4 the columns on this .csv file look different to other csv files
-        data = pd.read_csv( self.filename, skiprows=29, usecols=[1, 2, 3, 4], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! use this line for other .csv file (there is a 0 in the first columns hence the column shift)
+        data = pd.read_csv( self.filename, skiprows=29, usecols=[0, 1, 2, 3], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! Seeing as this was originally a .mf4 the columns on this .csv file look different to other csv files
+        # data = pd.read_csv( self.filename, skiprows=29, usecols=[1, 2, 3, 4], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! use this line for other .csv file (there is a 0 in the first columns hence the column shift)
         data = data.dropna()
         data = data.apply(pd.to_numeric, errors='coerce')
         for column in data.select_dtypes(include=[np.number]).columns:
@@ -37,7 +37,7 @@ class Experiment():
         pass
 
 
-file_path = r"Project\data\exp5_constin5.csv" # enter your file path here!!!!!
+file_path = r"Project\data\24_02_25\rec1_002.csv" # enter your file path here!!!!!
 data = Experiment(file_path)
 
 

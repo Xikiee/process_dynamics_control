@@ -2,40 +2,38 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.ndimage import median_filter
+from scipy.integrate import solve_ivp
 
 
-def ODE(P, F, h0, time, dt=0.1):
-    A1 = 0.0154  # Area of tank in m^2
-    A2 = 4.91e-4  # Area of drain pipe in m^2
+def ODE(P, F, time, h=0):
+    A1 = 0.0154          # Area of tank in m^2
+    A2 = 4.91e-4         # Area of drain pipe in m^2
     k_pump = 1  
     g = 9.81  
-    k_opening = 1  # Fixed within range 2 to 8
-    h = h0  #Initial height 
-    
+    k_opening = 1        # Fixed within range 2 to 8
+    q_leak = 1.05e-5
+
     # t_vals = np.arange(0, time_duration, dt)
     h_vals = np.zeros_like(time)
-    
-    # for i, t in enumerate(time):  
-    #     dh_dt = (k_pump/A1) * P - (k_opening * F * (A2 / A1) * np.sqrt(2 * g * h))  
-    #     h = max(0, h + dh_dt * dt)  
-    #     h_vals[i] = h
 
+    dt = time[1] - time[0]
+    
     for i in range(len(time)):
-        dh_dt = (k_pump/A1) * P[i] - (k_opening * F[i] * (A2 / A1) * np.sqrt(2 * g * h))  
-        h = max(0, h + dh_dt * dt)  
+        h = np.sqrt(h**2)
+        dh_dt = (k_pump/A1)*P[i] - F[i]*k_opening*(A2/A1) * np.sqrt(2*g*h) - q_leak/A1
+        h = h+dh_dt*dt
         h_vals[i] = h
 
     return time, h_vals
-
 
 
 class Experiment():
     def __init__(self, csv_name_, set_values_vs_time = None):
         self.filename = csv_name_
         #use this line if file was originally .mf4
-        # data = pd.read_csv( self.filename, skiprows=29, usecols=[0, 1, 2, 3], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! Seeing as this was originally a .mf4 the columns on this .csv file look different to other csv files
+        data = pd.read_csv( self.filename, skiprows=29, usecols=[0, 1, 2, 3], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! Seeing as this was originally a .mf4 the columns on this .csv file look different to other csv files
         # use this line if file was orignially .csv
-        data = pd.read_csv( self.filename, skiprows=29, usecols=[1, 2, 3, 4], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! use this line for other .csv file (there is a 0 in the first columns hence the column shift)
+        # data = pd.read_csv( self.filename, skiprows=29, usecols=[1, 2, 3, 4], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! use this line for other .csv file (there is a 0 in the first columns hence the column shift)
         data = data.dropna()
         data = data.apply(pd.to_numeric, errors='coerce')
         for column in data.select_dtypes(include=[np.number]).columns:
@@ -44,11 +42,10 @@ class Experiment():
         pass
 
 
-file_path = r"Project\data\exp5_constin5.csv" # enter your file path here!!!!!
+file_path = r"Project\data\24_02_25\rec1_002.csv" # enter your file path here!!!!!
 data = Experiment(file_path)
-print(data)
+# print(data.data.head())
 
-print(data)
 
 P = data.data['Pump']*0.1 #multiplying by 0.1 to change units
 F = data.data['Valve']
@@ -61,11 +58,9 @@ print(data.data.head())
 # print(f"int height = {h0}")
 # print(f"final time = {time_duration}")
 
-
 # Run the simulation
-time_model, height_model = ODE(P, F, h0, time)
+time_model, height_model = ODE(P, F, time)
 height_in_mm_model = height_model*10  # Convert to mm
-
 
 # Plot results
 plt.figure(figsize=(8, 5))
@@ -75,9 +70,11 @@ plt.plot(data.data['Time'].to_numpy(), data.data['Height'].to_numpy(), label = "
 # plt.scatter(time_exp, height_exp_data_mm, label="Experimental Data", color='r', marker='o', s=10)
 # plt.plot(time_exp, height_exp_data_mm, label='experiment data', color = 'r')
 
-plt.xlabel("Time [s]")
-plt.ylabel("Water Height [mm]")
+plt.xlabel("Time [s]", weight= 'bold')
+plt.ylabel("Water Height [mm]", weight = 'bold')
 plt.title("Comparison of Model and Experimental Water Levels")
 plt.legend()
-plt.grid()
+plt.minorticks_on()
+plt.grid(which ='major', linewidth = 0.5)
+plt.grid(which = 'minor', linewidth = 0.2)
 plt.show()
