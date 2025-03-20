@@ -9,16 +9,11 @@ def ODE(P, F, h0, time, dt=0.1):
     A2 = 4.91e-4  # Area of drain pipe in m^2
     k_pump = 1.1  
     g = 9.81  
-    k_opening = 5  # Fixed within range 2 to 8
+    k_opening = 2.5  # Fixed within range 2 to 8
     h = h0  #Initial height 
     
     # t_vals = np.arange(0, time_duration, dt)
     h_vals = np.zeros_like(time)
-    
-    # for i, t in enumerate(time):  
-    #     dh_dt = (k_pump/A1) * P - (k_opening * F * (A2 / A1) * np.sqrt(2 * g * h))  
-    #     h = max(0, h + dh_dt * dt)  
-    #     h_vals[i] = h
 
     for i in range(len(time)):
         dh_dt = (k_pump/A1) * P[i] - (k_opening * F[i] * (A2 / A1) * np.sqrt(2 * g * h))  
@@ -32,8 +27,8 @@ def ODE(P, F, h0, time, dt=0.1):
 class Experiment():
     def __init__(self, csv_name_, set_values_vs_time = None):
         self.filename = csv_name_
-        data = pd.read_csv( self.filename, skiprows=29, usecols=[0, 1, 2, 3], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! Seeing as this was originally a .mf4 the columns on this .csv file look different to other csv files
-        # data = pd.read_csv( self.filename, skiprows=29, usecols=[1, 2, 3, 4], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! use this line for other .csv file (there is a 0 in the first columns hence the column shift)
+        # data = pd.read_csv( self.filename, skiprows=29, usecols=[0, 1, 2, 3], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! Seeing as this was originally a .mf4 the columns on this .csv file look different to other csv files
+        data = pd.read_csv( self.filename, skiprows=29, usecols=[1, 2, 3, 4], names=['Time', 'Height', 'Pump', 'Valve'])  ##### !!!!!!!! use this line for other .csv file (there is a 0 in the first columns hence the column shift)
         data = data.dropna()
         data = data.apply(pd.to_numeric, errors='coerce')
         for column in data.select_dtypes(include=[np.number]).columns:
@@ -42,7 +37,7 @@ class Experiment():
         pass
 
 
-file_path = r"Project\data\cons_out_flow\const_outflow_90.csv" # enter your file path here!!!!!
+file_path = r"Project\data\exp5_constin5.csv" # enter your file path here!!!!!
 data = Experiment(file_path)
 
 
