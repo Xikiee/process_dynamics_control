@@ -37,7 +37,7 @@ class Experiment():
         pass
 
 
-file_path = r"Project\data\24_02_25\rec1_002.csv" # enter your file path here!!!!!
+file_path = r"Project\data\cons_out_flow\const_outflow_10.csv" # enter your file path here!!!!!
 data = Experiment(file_path)
 
 
