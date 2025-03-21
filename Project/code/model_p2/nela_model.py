@@ -24,7 +24,7 @@ def ODE(P, F, h0, time, A3, dt=0.1):
 class Experiment():
     def __init__(self, csv_name_, set_values_vs_time=None):
         self.filename = csv_name_
-        data = pd.read_csv(self.filename, skiprows=29, usecols=[0, 1, 2, 3], names=['Time', 'Height', 'Pump', 'Valve'])
+        data = pd.read_csv(self.filename, skiprows=29, usecols=[1, 2, 3, 4], names=['Time', 'Height', 'Pump', 'Valve'])
         data = data.dropna()
         data = data.apply(pd.to_numeric, errors='coerce')
         for column in data.select_dtypes(include=[np.number]).columns:
@@ -32,7 +32,7 @@ class Experiment():
         self.data = data
 
 
-file_path = r"/Users/nela_gawrychowska/Desktop/PR2/rec1_002.csv" 
+file_path = r"Project\data\16_03_experiments\const_outflow_08.csv" 
 data = Experiment(file_path)
 
 P = data.data['Pump'] * 0.1 
@@ -61,7 +61,7 @@ plt.plot(time_model, height_in_mm_model, label="Optimized model predicted height
 plt.plot(data.data['Time'].to_numpy(), data.data['Height'].to_numpy(), color='b', label="Experimental Data")
 plt.xlabel("Time [s]")
 plt.ylabel("Water Height [mm]")
-plt.title("Comparison of optimized model and experimental height level P=0.1 F=0.2", fontweight='bold')
+plt.title("Comparison of optimized model and experimental height level P=0.08-0.01 F=0.8", fontweight = 'bold')
 plt.legend()
 plt.grid()
 plt.show()
@@ -72,7 +72,7 @@ plt.figure(figsize=(8, 5))
 plt.plot(data.data['Time'], error, label="Optimized model absolute error", color='orange')
 plt.xlabel("Time [s]")
 plt.ylabel("Error [mm]")
-plt.title("Error between optimized model and experimental data P=0.1 F=0.2", fontweight='bold')
+plt.title("Error between optimized model and experimental data P=0.08-0.01 F=0.8", fontweight='bold')
 plt.legend()
 plt.grid()
 plt.show()

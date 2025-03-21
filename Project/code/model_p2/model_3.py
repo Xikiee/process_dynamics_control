@@ -42,7 +42,7 @@ class Experiment():
         pass
 
 
-file_path = r"Project\data\cons_out_flow\const_outflow_10.csv" # enter your file path here!!!!!
+file_path = r"Project\data\16_03_experiments\const_inflow_005.csv" # enter your file path here!!!!!
 data = Experiment(file_path)
 # print(data.data.head())
 
