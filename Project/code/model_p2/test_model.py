@@ -35,6 +35,7 @@ class Experiment():
 
 file_path = r"Project\data\24_02_25\rec1_004.csv"  # Enter your file path here
 data = Experiment(file_path)
+print(data.data)
 
 P = data.data['Pump'] *0.1 # Multiplying by 0.1 to change units
 F = data.data['Valve']
