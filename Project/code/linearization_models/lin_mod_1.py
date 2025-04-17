@@ -38,7 +38,7 @@ a3 = 0.00015
 
 f = 0.3                  # change f for the flow rate in question
 p = 0.01                 # this is the change in the pump value (initial value was 0.06 and was changed to 0.07)
-h_s = 350                # steady state height
+h_s = 200                # steady state height
 
 q1= k_pump/a1
 q2= ((a2/a1)+(a3/a1)) * k_opening * f * np.sqrt(2*g)
@@ -61,7 +61,7 @@ class Experiment():
         pass
 
 name = 'oliver'
-data = Experiment('project /processed_data/step_change_experiment_data/exp_5.csv', name)
+data = Experiment('Project/data/step_change_experiment_data/exp_6.csv', name)
 
 
 system_step_response(num,den,p, data)
