@@ -17,9 +17,12 @@ e_prev = 0 #m
 Kp = 5893.91 #ask Nela
 tau = 90.73
 
-Kc = tau/Kp/tc #ziegler nichols
-ti = tau
-td = 0.1 * tc
+# Kc = tau/Kp/tc #ziegler nichols
+Kc = 25.00
+# ti = tau
+ti = 375.00
+# td = 0.1 * tc
+td = 11.00
 UpperLevel = 0.4 #m, to avoid overflow
 fv = 0
 Normal_Operation = True #True if the system is in normal operation, False if the system is in overflow
